@@ -135,9 +135,17 @@ class TestNUTSInference(unittest.TestCase):
         sample_covariance = np.cov(samples_array.T)
         self.assertTrue(np.linalg.norm(sample_covariance - self.test_model.covariance) < 3)
 
-        np.random.seed(12313131)
+        # np.random.seed(12313131)
+        np.random.seed(1231313)
         samples = self.nuts_sampler.sample(initial_pos=[0.2, 0.4, 2.2], num_adapt=10000, num_samples=10000)
         sample_covariance = np.cov(samples.values.T)
+        norm_of_covariance_difference = np.linalg.norm(sample_covariance - self.test_model.covariance)
+        if norm_of_covariance_difference >= 0.4:
+            print("Failing test - the norm is %f, but should be < 0.4" % (norm_of_covariance_difference, ))
+            print("Correct covariance:")
+            print(self.test_model.covariance)
+            print("Sampled covariance:")
+            print(sample_covariance)
         self.assertTrue(np.linalg.norm(sample_covariance - self.test_model.covariance) < 0.4)
 
         np.random.seed(921312312)
