@@ -262,7 +262,8 @@ class HamiltonianMC(object):
 
             # Genrating sample
             position_m, _ = self._sample(position_m, trajectory_length, stepsize, lsteps)
-            samples[i] = position_m
+            position_m_out = np.core.records.fromarrays(position_m, dtype=samples[i].dtype)
+            samples[i] = position_m_out
 
         self.acceptance_rate = self.accepted_proposals / num_samples
 
